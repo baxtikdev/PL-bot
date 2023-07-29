@@ -21,8 +21,20 @@ def get_pagination_keyboard(current_page, total_pages, songs):
         if len(number) == 5:
             numbers.append(number)
             number = []
+        elif i == len(songs) - 1:
+            if len(number) > 0:
+                numbers.append(number)
     keys = numbers
-    if current_page == 1:
+    if current_page == total_pages == 1:
+        keys.append([
+            InlineKeyboardButton(text='❌', callback_data='current_page')
+        ])
+    if current_page == total_pages and total_pages != 1:
+        keys.append([
+            InlineKeyboardButton(text='⬅️', callback_data=f"previous_{current_page - 1}"),
+            InlineKeyboardButton(text='❌', callback_data='current_page')
+        ])
+    if current_page == 1 and current_page != total_pages:
         keys.append([
             InlineKeyboardButton(text='❌', callback_data='current_page'),
             InlineKeyboardButton(text='➡️', callback_data=f"next_{current_page + 1}")
@@ -32,11 +44,6 @@ def get_pagination_keyboard(current_page, total_pages, songs):
             InlineKeyboardButton(text='⬅️', callback_data=f"previous_{current_page - 1}"),
             InlineKeyboardButton(text='❌', callback_data='current_page'),
             InlineKeyboardButton(text='➡️', callback_data=f"next_{current_page + 1}")
-        ])
-    if current_page == total_pages:
-        keys.append([
-            InlineKeyboardButton(text='⬅️', callback_data=f"previous_{current_page - 1}"),
-            InlineKeyboardButton(text='❌', callback_data='current_page')
         ])
     numberKeyboard = InlineKeyboardMarkup(
         inline_keyboard=keys
