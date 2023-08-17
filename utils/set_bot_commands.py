@@ -6,5 +6,6 @@ async def set_default_commands(dp):
         [
             # types.BotCommand("song", "Botni ishga tushurish"),
             types.BotCommand("help", "Yordam"),
+            types.BotCommand("categories", "Ketegoriyalar"),
         ]
     )

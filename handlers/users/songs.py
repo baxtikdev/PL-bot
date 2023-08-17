@@ -55,7 +55,9 @@ async def search(message: Message, state: FSMContext):
 @dp.callback_query_handler(lambda c: c.data.startswith("https"), state='*')
 async def chooseSong(call: CallbackQuery):
     await call.answer(cache_time=0.02)
+    loader = await call.message.answer('Loading...')
     await call.message.answer_audio(audio=call.data, reply_markup=likes)
+    await loader.delete()
     return
 
 
