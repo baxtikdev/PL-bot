@@ -19,8 +19,8 @@ def songsList(songs):
 
 def menuCategory(categories):
     menuCategoryKeyboard = InlineKeyboardMarkup(row_width=2)
-    for i, category in enumerate(categories):
-        menuCategoryKeyboard.insert(InlineKeyboardButton(text=category, callback_data=category))
+    for key, value in categories.items():
+        menuCategoryKeyboard.insert(InlineKeyboardButton(text=value, callback_data=key))
     menuCategoryKeyboard.add(InlineKeyboardButton(text="Matn boyicha qidirish", callback_data="text_search"))
     
     return menuCategoryKeyboard
