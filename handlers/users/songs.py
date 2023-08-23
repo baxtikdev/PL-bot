@@ -14,7 +14,6 @@ session = requests.session()
 session.headers.update({
     'user-Agent': 'Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36',
     'Accept': '*/*', 'Connection': 'keep-alive', 'origin': 'https://z1.fm'})
-
 session.get("https://z1.fm")
 
 
