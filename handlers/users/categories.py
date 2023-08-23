@@ -13,19 +13,16 @@ from .pagination import (get_current_page_items, get_pagination_keyboard, items_
 number_pattern = re.compile(r'^[1-9]\d{0,6}$|0$')
 @dp.callback_query_handler(lambda query: number_pattern.match(query.data), state='*')
 async def handle_category_callback(call: types.CallbackQuery, state: FSMContext):
-    await call.answer(f"Received valid number: {int(call.data)}")
     await call.answer(cache_time=0.02)
     args = {
         "chat_id": call.message.chat.id,
         "message_id": call.message.message_id
     }
-    # request_url = "http://146.190.138.39/api/v1/music/?category={call.data}"
     request_url = f"http://146.190.138.39/api/v1/category/{call.data}/music/"
     response = requests.get(request_url)
     
     if response.status_code == 200:
         response_json = response.json()
-        print("Music: ", response_json)
         
         if len(response_json) > 0:
             songs = []
@@ -48,8 +45,6 @@ async def handle_category_callback(call: types.CallbackQuery, state: FSMContext)
             await show_page(call.message.chat.id, 1, songs)
         else:
             await call.message.answer("Hech narsa topilmadi 😔")
-    else:
-        print("API request failed:", response.text)
     
     await call.answer(cache_time=0.02, show_alert=False)
 
@@ -110,26 +105,8 @@ def format_data(data):
     return body
 
 
-@dp.callback_query_handler(lambda c: c.data.startswith("http"), state='*')
-async def chooseSong(call: types.CallbackQuery):
-    await call.answer(cache_time=0.02)
-    loader = await call.message.answer('Loading...')
-    music_url = call.data
-    # file_name = music_url.split("/")[-1]
-
-    response = requests.get(music_url)
-
-    if response.status_code == 200:
-        await call.message.answer_audio(audio=response.content, reply_markup=likes)
-    else:
-        print(f"Failed to download music file. Status code: {response.status_code}")
-    await loader.delete()
-    return
-
-
 @dp.callback_query_handler(lambda x: x.data in ['text_search'], state='*')
 async def change_language(call: types.CallbackQuery):
-    
+    await call.answer(cache_time=0.02)
     await call.message.answer(
-        text="Shunchaki menga qo'shiqchi yoki qo'shiq nomini jo'nating va men siz uchun musiqa topib beraman!",
-        reply_markup=None)
+        text="Shunchaki menga qo'shiqchi yoki qo'shiq nomini jo'nating va men siz uchun musiqa topib beraman!")

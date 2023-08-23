@@ -52,11 +52,23 @@ async def search(message: Message, state: FSMContext):
     return
 
 
-@dp.callback_query_handler(lambda c: c.data.startswith("https"), state='*')
+@dp.callback_query_handler(lambda c: c.data.startswith("http"), state='*')
 async def chooseSong(call: CallbackQuery):
     await call.answer(cache_time=0.02)
     loader = await call.message.answer('Loading...')
-    await call.message.answer_audio(audio=call.data, reply_markup=likes)
+    url = call.data.split('//')[0][:-1]
+    if url == 'http':
+        musicUrl = requests.get(call.data).content
+    elif url == 'https':
+        musicUrl = call.data
+    else:
+        await call.message.answer("Failed to download music file")
+        return
+
+    try:
+        await call.message.answer_audio(audio=musicUrl, reply_markup=likes)
+    except:
+        await call.message.answer("Failed to download music file")
     await loader.delete()
     return
 

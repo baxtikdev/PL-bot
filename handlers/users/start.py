@@ -6,7 +6,13 @@ from keyboards.inline.inlineButtons import menuCategory
 from loader import dp
 
 
-@dp.message_handler(Command(["start", "categories"]), state='*')
+@dp.message_handler(Command(["start"]), state='*')
+async def bot_start(message: types.Message):    
+    await message.answer(
+        text="Shunchaki menga qo'shiqchi yoki qo'shiq nomini jo'nating va men siz uchun musiqa topib beraman!")
+
+
+@dp.message_handler(Command(["categories"]), state='*')
 async def bot_start(message: types.Message):
     categories = {}
     request_url = "http://146.190.138.39/api/v1/category/"
@@ -14,13 +20,11 @@ async def bot_start(message: types.Message):
     
     if response.status_code == 200:
         response_json = response.json()
-        print(response_json)
         for category in response_json:
             if category['is_active']:
                 categories[category['id']] = category['title']
-        print("DATA:", categories)
     else:
-        print("API request failed:", response.text)
+        await message.answer("Qayta urinib ko'ring!")
     
     await message.answer(
         text="Shunchaki qo'shiqchi kategoriyasini jo'nating va men siz uchun musiqa topib beraman!",
